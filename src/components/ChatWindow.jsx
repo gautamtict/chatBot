@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Message from './Message';
 import { TextField, Button, Box, Paper, Avatar, Typography } from '@mui/material';
+import SuggestedPrompt from './SuggestedPrompt';
 
 const ChatWindow = () => {
   const [messages, setMessages] = useState(() => {
@@ -44,7 +45,7 @@ const ChatWindow = () => {
       const updatedMessages = [...newMessages.slice(0, -1), botResponse];
       setMessages(updatedMessages);
       localStorage.setItem('chatMessages', JSON.stringify(updatedMessages));
-    }, 1200); // 1.2s delay to simulate thinking
+    }, 1200);
   };
   
   const scrollToBottom = () => {
@@ -54,12 +55,21 @@ const ChatWindow = () => {
   useEffect(scrollToBottom, [messages]);
 
   return (
+    <Box sx={{ display: 'flex', height: '100vh' }}>
+    {/* Left: Suggested Prompts */}
+    <Box sx={{ width: 150, borderRight: '1px solid #ddd', bgcolor: '#f9f9f9' }}>
+      <SuggestedPrompt onPromptClick={setInput} />
+    </Box>
+  
+    {/* Right: Chat UI */}
     <Paper
       elevation={3}
       sx={{
-        height: '100vh',
+        flex: 1,
         display: 'flex',
         flexDirection: 'column',
+        height: '100vh',
+        borderRadius: 0,
       }}
     >
       {/* Header */}
@@ -74,7 +84,7 @@ const ChatWindow = () => {
         <Avatar src="" alt="User" sx={{ mr: 2 }} />
         <Typography variant="h6">Gautam Thakur</Typography>
       </Box>
-
+  
       {/* Messages */}
       <Box
         sx={{
@@ -88,7 +98,7 @@ const ChatWindow = () => {
         ))}
         <div ref={messagesEndRef} />
       </Box>
-
+  
       {/* Input Box */}
       <Box
         sx={{
@@ -110,6 +120,9 @@ const ChatWindow = () => {
         </Button>
       </Box>
     </Paper>
+  </Box>
+  
+   
   );
 };
 
